@@ -2,7 +2,7 @@
 #' @rdname dyadic
 #' @title \code{dyadic} objects
 #' @description Creates and print dyadic objects
-#' @param d a vector of 0/1
+#' @param x an object to coerce to a \code{dyadic}
 #' @return \code{dyadic} checks and...
 NULL
 
@@ -12,7 +12,6 @@ is.dyadic <- function(x) inherits(x, "dyadic")
 
 #' @rdname dyadic
 #' @export
-#' @param x an object to coerce to a \code{dyadic}
 as.dyadic <- function(x, ...) UseMethod("as.dyadic")
 
 #' @rdname dyadic

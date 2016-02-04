@@ -9,6 +9,10 @@
 #' @return the image by the odometer
 NULL
 
+#' @rdname dyadic
+#' @export
+odometer <- function(x, ...) UseMethod("odometer")
+
 #' @rdname odometer
 odometer0.dyadic <- function(d, image=c("forward", "backward")){
   image <- match.arg(image)
