@@ -2,16 +2,15 @@
 #' @rdname odometer
 #' @title The odometer transformation
 #' @description Applies the odometer transformation
-#' @param d a dyadic number
-#' @param u a number between 0 (included) and 1 (excluded)
+#' @param x a dyadic number or a real number between 0 (included) and 1 (excluded)
 #' @param image \code{"forward"} to apply the odometer, \code{"backward"} to apply its inverse
 #' @param niters the number of iterations
 #' @return the image by the odometer
 NULL
 
-#' @rdname dyadic
+#' @rdname odometer
 #' @export
-odometer <- function(x, ...) UseMethod("odometer")
+odometer <- function(x, image=c("forward", "backward"), niters=1L) UseMethod("odometer")
 
 #' @rdname odometer
 odometer0.dyadic <- function(d, image=c("forward", "backward")){
@@ -38,9 +37,9 @@ odometer0.dyadic <- function(d, image=c("forward", "backward")){
 
 #' @rdname odometer
 #' @export
-odometer.dyadic <- function(d, image=c("forward", "backward"), niters=1L){
+odometer.dyadic <- function(x, image=c("forward", "backward"), niters=1L){
   image <- match.arg(image)
-  d <- as.dyadic(d)
+  d <- as.dyadic(x)
   if(image=="forward"){
     d <- odometer0.dyadic(d, image="forward")
     if(niters==1L) return(d)
@@ -72,5 +71,18 @@ odometer.dyadic <- function(d, image=c("forward", "backward"), niters=1L){
       out[i, seq_along(d)] <- d
     }
     return(out[, 1:nmax])
+  }
+}
+
+#' @rdname odometer
+#' @export
+odometer.numeric <- function(x, image=c("forward", "backward"), niters=1L){
+  if(x<0 || x>=1) stop("x must be in [0,1[")
+  if(niters==1L){
+    return(dyadic2num(odometer0.dyadic(num2dyadic(x), image=image)))
+  }
+  else{
+    iters <- odometer.dyadic(num2dyadic(x), image=image, niters=niters)
+    return(apply(iters, 1, dyadic2num))
   }
 }

@@ -40,3 +40,29 @@ test_that("Odometer backward - two iterations", {
   Od12 <- odometer.dyadic(d, niters=2, image="backward")
   expect_true(all(Od12 == rbind(Od1, Od2)))
 })
+
+test_that("Odometer on [0,1[ - forward - one iteration", {
+  expect_true(odometer(0)==0.5)
+  expect_true(odometer(0.5)==0.25)
+  u <- c(0.1, 0.2, 0.3, 0.4)
+  Ou <- sapply(u, odometer)
+  expect_equal(Ou, u+0.5)
+})
+
+test_that("Odometer on [0,1[ - backward - one iteration", {
+  expect_true(odometer(0.5, image="backward") == 0)
+  expect_true(odometer(0.25, image="backward") == 0.5)
+  u <- c(0.6, 0.7, 0.8, 0.9)
+  uO <- sapply(u, function(u) odometer(u, image="backward"))
+  expect_equal(uO, u-0.5)
+})
+
+test_that("Odometer on [0,1[ - several iterations", {
+  set.seed(666); u <- runif(1)
+  n <- 50L
+  Ou <- odometer(u, niters=n)
+  expect_true(length(Ou)==n)
+  expect_true(all(u < 1) && all(u >= 0))
+  uO <- odometer(Ou[n], image="backward", niters=n)
+  expect_true(uO[n]==u)
+})

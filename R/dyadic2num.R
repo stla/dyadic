@@ -2,20 +2,20 @@
 #' @rdname dyadic2num
 #' @title Conversion between \code{dyadic} and \code{numeric}
 #' @description Convert \code{dyadic} to \code{numeric} and vice-versa
-#' @param d a dyadic number
-#' @param u a number between 0 and 1
+#' @param x a dyadic number or a number between 0 (included) and 1 (excluded)
+#' @param nmax integer, the maximal length of the dyadic number
 #' @return \code{dyadic2num} returns a number between 0 and 1, \code{num2dyadic} returns a dyadic number
 NULL
 
-#' @rdname dyadic
+#' @rdname dyadic2num
 #' @export
 #' @param x an object to coerce to a \code{dyadic}
-dyadic2num <- function(x, ...) UseMethod("dyadic2num")
+dyadic2num <- function(x) UseMethod("dyadic2num")
 
 #' @rdname dyadic2num
 #' @export
-dyadic2num.dyadic <- function(d){
-  return(sum(d/2L^(seq_along(d))))
+dyadic2num.dyadic <- function(x){
+  return(sum(x/2L^(seq_along(x))))
 }
 
 #' @rdname dyadic2num
@@ -29,7 +29,7 @@ dyadic2num.numeric <- function(x) dyadic2num.dyadic(as.dyadic.numeric(x))
 
 #' @rdname dyadic2num
 #' @export
-num2dyadic <- function(u, nmax=52){ # for 0 <= num < 1
+num2dyadic <- function(u, nmax=52L){ # for 0 <= num < 1
   # 52 = num2dyadic(1-.Machine$double.eps)
   x <- u
   out <- integer(nmax)

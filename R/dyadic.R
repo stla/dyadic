@@ -12,7 +12,7 @@ is.dyadic <- function(x) inherits(x, "dyadic")
 
 #' @rdname dyadic
 #' @export
-as.dyadic <- function(x, ...) UseMethod("as.dyadic")
+as.dyadic <- function(x) UseMethod("as.dyadic")
 
 #' @rdname dyadic
 #' @export
@@ -35,6 +35,6 @@ as.dyadic.numeric <- function(x){
 
 #' @rdname dyadic
 #' @export
-print.dyadic <- function(x, ...){
+print.dyadic <- function(x){
   print(unclass(x))
 }
