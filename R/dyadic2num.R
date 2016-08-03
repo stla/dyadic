@@ -29,14 +29,15 @@ dyadic2num.numeric <- function(x) dyadic2num.dyadic(as.dyadic.numeric(x))
 
 #' @rdname dyadic2num
 #' @export
-num2dyadic <- function(u, nmax=52L){ # for 0 <= num < 1
-  # 52 = num2dyadic(1-.Machine$double.eps)
+num2dyadic <- function(u, nmax=1024L){ # for 0 <= num < 1
+  # 1/2^1024 == 0
   x <- u
   out <- integer(nmax)
   i <- 0L
   j <- 0L
   while(x>0 && i < nmax){
-    j <- 1L + floor(-log2(x+.Machine$double.eps)) #floor(-log2(x)-.Machine$double.eps) #
+    j <- 1L + max(0L, floor(-log2(x*(1+sqrt(.Machine$double.eps)))))
+    #j <- 1L + floor(-log2(x+.Machine$double.eps))
     #i <- i + j
     #if(i <= nmax) out[i] <- 1L
     #x <- 2L^j*x - out[i]
